@@ -15,7 +15,6 @@ const (
 
 type Maze interface {
 	Create()
-	// Draw(img *image.RGBA)
 	Draw() *image.RGBA
 }
 
@@ -166,8 +165,36 @@ func (w *WallExtending) Create() {
 			w.extendWall(r, c)
 		}
 	}
-
 }
+
+// func (w *WallExtending) Draw(img *image.RGBA) {
+// 		green := color.RGBA{R: 0, G: 128, B: 0, A: 255}
+// 		black := color.RGBA{R: 0, G: 0, B: 0, A: 255}
+// 		side := 20
+
+// 		var cl color.RGBA
+
+// 		for r := 0; r <= w.Rows - 1; r++ {
+// 			for c := 0; c <= w.Cols - 1; c++ {
+// 				switch {
+// 				case r == 0 && c == 1 || r == w.Rows - 1 && c == w.Cols - 2:
+// 					cl = green
+	
+// 				case w.Grid[r][c] == Wall:
+// 					cl = black
+	
+// 				default:
+// 					cl= green
+// 				}
+
+// 				for y := side * r; r < side * r + side; y++ {
+// 					for x := side * c; x < side * c + side; x++ {
+// 						img.Set(x, y, cl)
+// 					}
+// 				}
+// 			}
+// 		}
+// }
 
 func (w *WallExtending) Draw() *image.RGBA {
 	green := color.NRGBA{R: 0, G: 128, B: 0, A: 255}
@@ -189,7 +216,7 @@ func (w *WallExtending) Draw() *image.RGBA {
 			default:
 				color = green
 			}
-			
+
 			draw.Draw(
 				img,
 				image.Rect(size * c, size * r, size * c + size, size * r + size),
@@ -197,7 +224,17 @@ func (w *WallExtending) Draw() *image.RGBA {
 				image.Point{},
 				draw.Src,
 			)
+
+
+			// draw.Draw(
+			// 	img,
+			// 	image.Rect(size * c, size * r, size * c + size, size * r + size),
+			// 	&image.Uniform{color},
+			// 	image.Point{},
+			// 	draw.Src,
+			// )
 		}
 	}
+
 	return img
 }
