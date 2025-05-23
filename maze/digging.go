@@ -1,4 +1,4 @@
-package maize
+package maze
 
 import (
 	"image"

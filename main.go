@@ -3,7 +3,7 @@ package main
 import (
 	"image"
 
-	"github.com/taKana671/GoMaze/maize"
+	"github.com/taKana671/GoMaze/maze"
 
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
@@ -30,7 +30,7 @@ func main() {
 	a := app.New()
 	w := a.NewWindow("GoMaze")
 
-	img := image.NewRGBA(image.Rect(0, 0,  maize.RECSIZE * ROWS, maize.RECSIZE * COLS))
+	img := image.NewRGBA(image.Rect(0, 0,  maze.RECSIZE * ROWS, maze.RECSIZE * COLS))
 	canvasImg := canvas.NewImageFromImage(img)
 	canvasImg.FillMode = canvas.ImageFillOriginal
 
@@ -39,9 +39,9 @@ func main() {
 		
 		switch algo {
 		case FOLLOWING:
-			img = maize.NewFollower(31, 31).Create()
+			img = maze.NewFollower(31, 31).Create()
 		case DIGGING:
-			img = maize.NewDigger(31, 31).Create()
+			img = maze.NewDigger(31, 31).Create()
 		}
 
 		canvasImg.Image = img
