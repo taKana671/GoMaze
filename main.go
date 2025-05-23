@@ -1,8 +1,9 @@
 package main
 
 import (
-	"GoMaze/maize"
 	"image"
+
+	"github.com/taKana671/GoMaze/maize"
 
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
