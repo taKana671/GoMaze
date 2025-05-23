@@ -6,7 +6,6 @@ import (
 	"image/draw"
 	"math/rand"
 	"slices"
-	"sync"
 )
 
 
@@ -154,18 +153,11 @@ func (d *Digger) draw() *image.RGBA {
 	green := color.NRGBA{R: 0, G: 128, B: 0, A: 255}
 	black := color.NRGBA{R: 0, G: 0, B: 0, A: 255}
 
-	var wg sync.WaitGroup
-	// wg.Add(31 * 31)
-
 	img := image.NewRGBA(image.Rect(0, 0, RECSIZE * (d.Rows - 2), RECSIZE * (d.Cols - 2)))
 	var color color.NRGBA
-	var mu sync.Mutex
-
 
 	for r := 1; r <= d.Rows - 2; r++ {
 		for c := 1; c <= d.Cols - 2; c++ {
-			wg.Add(1)
-
 			switch {
 			case r == 1 && c == 2 || r == d.Rows - 2 && c == d.Cols - 3:
 				color = green
@@ -180,57 +172,14 @@ func (d *Digger) draw() *image.RGBA {
 			_c := c - 1
 			_r := r - 1
 
-			go func() {
-				defer wg.Done()
-
-				mu.Lock()
-				draw.Draw(
-					img,
-					image.Rect(RECSIZE * _c, RECSIZE * _r, RECSIZE * _c + RECSIZE, RECSIZE * _r + RECSIZE),
-					&image.Uniform{color},
-					image.Point{},
-					draw.Src,
-				)
-				mu.Unlock()
-			}()
+			draw.Draw(
+				img,
+				image.Rect(RECSIZE * _c, RECSIZE * _r, RECSIZE * _c + RECSIZE, RECSIZE * _r + RECSIZE),
+				&image.Uniform{color},
+				image.Point{},
+				draw.Src,
+			)
 		}
 	}
-
-	wg.Wait()
 	return img
 }
-
-// func (d *Digger) draw() *image.RGBA {
-// 	green := color.NRGBA{R: 0, G: 128, B: 0, A: 255}
-// 	black := color.NRGBA{R: 0, G: 0, B: 0, A: 255}
-
-// 	img := image.NewRGBA(image.Rect(0, 0, RECSIZE * (d.Rows - 2), RECSIZE * (d.Cols - 2)))
-// 	var color color.NRGBA
-
-// 	for r := 1; r <= d.Rows - 2; r++ {
-// 		for c := 1; c <= d.Cols - 2; c++ {	
-// 			switch {
-// 			case r == 1 && c == 2 || r == d.Rows - 2 && c == d.Cols - 3:
-// 				color = green
-
-// 			case d.Grid[r][c] == WALL:
-// 				color = black
-
-// 			default:
-// 				color = green
-// 			}
-
-// 			_c := c - 1
-// 			_r := r - 1
-
-// 			draw.Draw(
-// 				img,
-// 				image.Rect(RECSIZE * _c, RECSIZE * _r, RECSIZE * _c + RECSIZE, RECSIZE * _r + RECSIZE),
-// 				&image.Uniform{color},
-// 				image.Point{},
-// 				draw.Src,
-// 			)
-// 		}
-// 	}
-// 	return img
-// }
